@@ -20,20 +20,6 @@ class OrderPageController extends GetxController {
   RxList<Order>? orderList = <Order>[].obs;
   Rx<Order> order = const Order().obs;
 
-  getSentOrders(String status) async {
-    isOrderLoading(true);
-    try {
-      List<Order> orders = await orderRepository.getOrder(status);
-      orderList!(orders);
-      print(orders);
-    } catch (e) {
-      isOrderError(true);
-      orderErrorText("Error Happened");
-      print(e);
-    }
-    isOrderLoading(false);
-  }
-
   getReceivedOrders(String status) async {
     isOrderLoading(true);
     try {

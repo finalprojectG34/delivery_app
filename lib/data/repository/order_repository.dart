@@ -45,7 +45,7 @@ class OrderRepository {
     final response = await gqlClient.query(
       QueryOptions(
         document: gql(getOrderByDelivery),
-        variables: {"deliveryStatus": "REQUESTED"},
+        variables: {"deliveryStatus": status},
         fetchPolicy: FetchPolicy.noCache,
       ),
     );
