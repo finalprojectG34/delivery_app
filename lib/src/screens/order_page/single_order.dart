@@ -55,7 +55,7 @@ class SingleOrder extends StatelessWidget {
                 'Order status',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              Text('${order.status}',
+              Text('${order.deliveryStatus}',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

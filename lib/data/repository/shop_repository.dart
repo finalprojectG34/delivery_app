@@ -1,7 +1,6 @@
 import 'package:delivery_app/src/models/shop.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import '../../src/models/order.dart';
 import '../../src/models/user.dart';
 
 class ShopRepository {
@@ -90,55 +89,6 @@ class ShopRepository {
     return shops;
   }
 
-  Future<Order> assignDelivery(String orderId, String shopId) async {
-    String orderAction = r'''
-        mutation Mutation($orderId: ID, $action: OrderActionsTypesInput) {
-          orderAction(orderId: $orderId, action: $action) {
-            id
-            status
-            userId
-            shopId
-            createdAt
-            deliveryId
-            orderItems {
-              id
-              name
-              price
-              amount
-            }
-            subTotal
-            deliveryAddress {
-              subCity
-              city
-              addressName
-              country
-            }
-            actions {
-              type
-              date
-              messages
-            }
-          }
-        }
-      ''';
-    final response = await gqlClient.query(
-      QueryOptions(
-        document: gql(orderAction),
-        variables: {
-          "orderId": orderId,
-          "action": {"actionType": "RequestDelivery", "deliveryId": shopId}
-        },
-        fetchPolicy: FetchPolicy.noCache,
-      ),
-    );
-    if (response.hasException) {
-      print(response.exception);
-      throw Exception("Error Happened");
-    }
-    print(response);
-    return Order.fromJson(response.data!["orderAction"]);
-  }
-
   Future<List<Shop>> getMockShops() {
     return Future.delayed(const Duration(seconds: 4), () {
       return List.generate(30, (i) {
@@ -193,55 +143,6 @@ class ShopRepository {
     }
     print(response);
     return Shop.fromJson(response.data!["getOneCompany"]);
-  }
-
-  Future<Order> removeDelivery(String orderId) async {
-    String orderAction = r'''
-        mutation Mutation($orderId: ID, $action: OrderActionsTypesInput) {
-          orderAction(orderId: $orderId, action: $action) {
-            id
-            status
-            userId
-            shopId
-            createdAt
-            deliveryId
-            orderItems {
-              id
-              name
-              price
-              amount
-            }
-            subTotal
-            deliveryAddress {
-              subCity
-              city
-              addressName
-              country
-            }
-            actions {
-              type
-              date
-              messages
-            }
-          }
-        }
-      ''';
-    final response = await gqlClient.query(
-      QueryOptions(
-        document: gql(orderAction),
-        variables: {
-          "orderId": orderId,
-          "action": const {"actionType": "DeclinedByDelivery"}
-        },
-        fetchPolicy: FetchPolicy.noCache,
-      ),
-    );
-    if (response.hasException) {
-      print(response.exception);
-      throw Exception("Error Happened");
-    }
-    print(response);
-    return Order.fromJson(response.data!["orderAction"]);
   }
 }
 

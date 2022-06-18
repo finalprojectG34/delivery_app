@@ -18,8 +18,6 @@ class ReceivedOrderStatus extends StatefulWidget {
 }
 
 class _ReceivedOrderStatusState extends State<ReceivedOrderStatus> {
-  OrderPageController orderPageController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return GetX<OrderPageController>(

@@ -8,11 +8,11 @@ class OrderRepository {
   OrderRepository({required this.gqlClient});
 
   Future<List<Order>> getOrder(String status) async {
-    String getOrderByUserId = r'''
-        query GetOrderByUserId($status: String) {
-          getOrderByUserId(status: $status) {
+    String getOrderByDelivery = r'''
+       query GetOrderByDelivery($deliveryStatus: OrderDeliveryStatus){
+          getOrderByDelivery(deliveryStatus: $deliveryStatus) {
             id
-            status
+            deliveryStatus
             userId
             shopId
             createdAt
@@ -29,13 +29,23 @@ class OrderRepository {
               subCity
               country
             }
+            actions {
+              type
+              date
+              messages
+            }
+            sellerActions {
+              type
+              date
+              messages
+            }
           }
         }
       ''';
     final response = await gqlClient.query(
       QueryOptions(
-        document: gql(getOrderByUserId),
-        variables: {"status": status},
+        document: gql(getOrderByDelivery),
+        variables: {"deliveryStatus": "REQUESTED"},
         fetchPolicy: FetchPolicy.noCache,
       ),
     );
@@ -45,7 +55,7 @@ class OrderRepository {
       throw Exception("Error Happened");
     } else {
       print(response);
-      for (var element in (response.data!["getOrderByUserId"] as List)) {
+      for (var element in (response.data!["getOrderByDelivery"] as List)) {
         print(element);
         newOrders.add(Order.fromJson(element));
       }
@@ -58,7 +68,7 @@ class OrderRepository {
         query GetOneOrder($getOneOrderId: String!) {
           getOneOrder(id: $getOneOrderId) {
             id
-            status
+            deliveryStatus
             userId
             shopId
             createdAt
@@ -77,9 +87,14 @@ class OrderRepository {
               country
             }
             actions {
+              type
               date
               messages
+            }
+            sellerActions {
               type
+              date
+              messages
             }
           }
         }
@@ -151,7 +166,7 @@ class OrderRepository {
           mutation OrderAction($orderId: ID, $action: OrderActionsTypesInput) {
             orderAction(orderId: $orderId, action: $action) {
               id
-              status
+              deliveryStatus
               userId
               shopId
               deliveryId
@@ -169,6 +184,11 @@ class OrderRepository {
                 addressName
               }
               actions {
+                type
+                date
+                messages
+              }
+              sellerActions {
                 type
                 date
                 messages
@@ -191,6 +211,114 @@ class OrderRepository {
     print(response);
     Order newOrder = Order.fromJson(response.data!["orderAction"]);
     return newOrder;
+  }
+
+  Future<Order> assignDelivery(String orderId, String shopId) async {
+    String orderAction = r'''
+        mutation Mutation($orderId: ID, $action: OrderActionsTypesInput) {
+          orderAction(orderId: $orderId, action: $action) {
+            id
+            deliveryStatus
+            userId
+            shopId
+            createdAt
+            deliveryId
+            orderItems {
+              id
+              name
+              price
+              amount
+            }
+            subTotal
+            deliveryAddress {
+              subCity
+              city
+              addressName
+              country
+            }
+            actions {
+              type
+              date
+              messages
+            }
+            sellerActions {
+              type
+              date
+              messages
+            }
+          }
+        }
+      ''';
+    final response = await gqlClient.query(
+      QueryOptions(
+        document: gql(orderAction),
+        variables: {
+          "orderId": orderId,
+          "action": {"actionType": "RequestDelivery", "deliveryId": shopId}
+        },
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    if (response.hasException) {
+      print(response.exception);
+      throw Exception("Error Happened");
+    }
+    print(response);
+    return Order.fromJson(response.data!["orderAction"]);
+  }
+
+  Future<Order> removeDelivery(String orderId) async {
+    String orderAction = r'''
+        mutation Mutation($orderId: ID, $action: OrderActionsTypesInput) {
+          orderAction(orderId: $orderId, action: $action) {
+            id
+            deliveryStatus
+            userId
+            shopId
+            createdAt
+            deliveryId
+            orderItems {
+              id
+              name
+              price
+              amount
+            }
+            subTotal
+            deliveryAddress {
+              subCity
+              city
+              addressName
+              country
+            }
+            actions {
+              type
+              date
+              messages
+            }
+            sellerActions {
+              type
+              date
+              messages
+            }
+          }
+        }
+      ''';
+    final response = await gqlClient.query(
+      QueryOptions(
+        document: gql(orderAction),
+        variables: {
+          "orderId": orderId,
+          "action": const {"actionType": "DeclinedByDelivery"}
+        },
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    if (response.hasException) {
+      print(response.exception);
+      throw Exception("Error Happened");
+    }
+    print(response);
+    return Order.fromJson(response.data!["orderAction"]);
   }
 
   Future deleteOrder(String orderId) async {

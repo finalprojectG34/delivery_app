@@ -58,11 +58,12 @@ class _ReceivedOrderDetailState extends State<ReceivedOrderDetail> {
                           SizedBox(height: 10),
                           OrderInfo(ctx),
                           SizedBox(height: 20),
-                          if (ctx.order.value.status == "REQUESTED")
+                          if (ctx.order.value.deliveryStatus == "REQUESTED")
                             AcceptReject(ctx),
-                          if (ctx.order.value.status == "DELIVERY_PENDING")
+                          if (ctx.order.value.deliveryStatus ==
+                              "DELIVERY_PENDING")
                             ReceiveFromSeller(ctx),
-                          if (ctx.order.value.status == "ON_DELIVERY")
+                          if (ctx.order.value.deliveryStatus == "ON_DELIVERY")
                             ReturnToSeller(ctx),
                         ],
                       ),

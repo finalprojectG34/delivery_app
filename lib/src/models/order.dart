@@ -3,7 +3,7 @@ import 'package:delivery_app/src/models/user.dart';
 class Order {
   const Order({
     this.id,
-    this.status,
+    this.deliveryStatus,
     this.userId,
     this.shopId,
     this.orderItems,
@@ -16,7 +16,7 @@ class Order {
   });
 
   final String? id;
-  final String? status;
+  final String? deliveryStatus;
   final String? userId;
   final String? shopId;
   final List<OrderItem>? orderItems;
@@ -30,7 +30,7 @@ class Order {
   factory Order.fromJson(Map<String, dynamic> json) {
     Order item = Order(
       id: json['id'],
-      status: json['status'],
+      deliveryStatus: json['deliveryStatus'],
       userId: json['userId'],
       shopId: json['shopId'],
       deliveryId: (json['deliveryId'] != null) ? json['deliveryId'] : "",
@@ -55,7 +55,7 @@ class Order {
 
   @override
   String toString() {
-    return '{id: $id status: $status userId: $userId, createdAt: $createdAt}';
+    return '{id: $id deliveryStatus: $deliveryStatus userId: $userId, createdAt: $createdAt}';
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:delivery_app/src/screens/order_page/order_page_ctx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,8 @@ class SearchDelivery extends StatefulWidget {
 }
 
 class _SearchDeliveryState extends State<SearchDelivery> {
+  OrderPageController orderPageController = Get.find();
+
   @override
   void initState() {
     ShopsListController shopsListController = Get.find();
@@ -29,11 +32,13 @@ class _SearchDeliveryState extends State<SearchDelivery> {
       ),
       body: GetX<ShopsListController>(
         builder: (ctx) {
-          return ctx.isLoading.isTrue
+          return ctx.isLoading.isTrue ||
+                  orderPageController.isOrderLoading.isTrue
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : ctx.errorOccurred.isTrue
+              : ctx.errorOccurred.isTrue ||
+                      orderPageController.isOrderError.isTrue
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -57,8 +62,7 @@ class _SearchDeliveryState extends State<SearchDelivery> {
                         itemBuilder: (cx, i) => Card(
                           child: Padding(
                             padding: EdgeInsets.all(10),
-                            child:
-                                DeliveryProfile(ctx, ctx.shopsList.value![i]),
+                            child: DeliveryProfile(ctx.shopsList.value![i]),
                           ),
                         ),
                       ),
@@ -68,7 +72,7 @@ class _SearchDeliveryState extends State<SearchDelivery> {
     );
   }
 
-  DeliveryProfile(ShopsListController ctx, Shop shop) {
+  DeliveryProfile(Shop shop) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -147,7 +151,7 @@ class _SearchDeliveryState extends State<SearchDelivery> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ctx.assignDelivery(widget.orderId, shop.id!);
+                  orderPageController.assignDelivery(widget.orderId, shop.id!);
                 },
                 child: Text("Assign"),
               )

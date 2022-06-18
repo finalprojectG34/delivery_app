@@ -15,10 +15,10 @@ class _ReceivedOrderPageState extends State<ReceivedOrdersPage>
   late TabController _tabController;
   List<String> aa = [
     'REQUESTED',
-    'CANCELED',
+    'DELIVERY_PENDING',
     'ON_DELIVERY',
     'DELIVERED',
-    'ACCEPTED',
+    'CANCELED',
   ];
 
   OrderPageController orderPageController = Get.find();
