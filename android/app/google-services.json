@@ -1,0 +1,143 @@
+{
+  "project_info": {
+    "project_number": "185917106202",
+    "firebase_url": "https://webproj1-a.firebaseio.com",
+    "project_id": "webproj1-a",
+    "storage_bucket": "webproj1-a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185917106202:android:57194c45a537767d03c9a3",
+        "android_client_info": {
+          "package_name": "com.deadliners.sms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185917106202-rif388vc0po7u19l1q66016n3det2612.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deadliners.sms",
+            "certificate_hash": "8a377fa3061b26d013a598303578d51942fa13ff"
+          }
+        },
+        {
+          "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk3MEGNMBUkh8roOENNxjWC-ZAt3Lnfqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185917106202-khq72q3tqv3vgc0vtl6ejm56qn88f5is.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.deadliners.sms"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185917106202:android:ea521850d9195f4603c9a3",
+        "android_client_info": {
+          "package_name": "com.example.delivery_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185917106202-5jki01cqi11s83v1sb8oo0sp1bpff410.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.delivery_app",
+            "certificate_hash": "8a377fa3061b26d013a598303578d51942fa13ff"
+          }
+        },
+        {
+          "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk3MEGNMBUkh8roOENNxjWC-ZAt3Lnfqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185917106202-khq72q3tqv3vgc0vtl6ejm56qn88f5is.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.deadliners.sms"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185917106202:android:8d6266303a958d0903c9a3",
+        "android_client_info": {
+          "package_name": "com.example.flutter_proj_n"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185917106202-kde48k9vvphsnin4askjtcrcoikh3ab7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_proj_n",
+            "certificate_hash": "3b520d8e453292d420ce0a735d338cd10ff3a01a"
+          }
+        },
+        {
+          "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk3MEGNMBUkh8roOENNxjWC-ZAt3Lnfqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185917106202-mf4spv2i5noi31k7uerl3qn2n1jq0htd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185917106202-khq72q3tqv3vgc0vtl6ejm56qn88f5is.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.deadliners.sms"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
