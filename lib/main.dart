@@ -33,7 +33,7 @@ class _AppViewState extends State<AppView> {
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
       cache: GraphQLCache(),
-      link: HttpLink("http://192.168.0.134:8000/graphql"),
+      link: HttpLink("http://192.168.0.196:8000/graphql"),
     ),
   );
 
@@ -42,7 +42,7 @@ class _AppViewState extends State<AppView> {
     return GraphQLProvider(
       child: GetMaterialApp(
         title: 'Sms',
-        // initialRoute: '/',
+        initialRoute: '/',
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.generateRoute,
@@ -60,7 +60,6 @@ class _AppViewState extends State<AppView> {
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        // home: appController.isAuthenticated.isTrue?App():Login(),
       ),
       client: client,
     );

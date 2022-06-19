@@ -1,15 +1,20 @@
-import 'package:delivery_app/data/repository/item_repository.dart';
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../data/repository/user_repository.dart';
 import '../../app.dart';
 import '../auth/login/login.dart';
 
 class AppController extends GetxController {
-  final ItemRepository itemRepository;
+  final UserRepository userRepository;
 
-  AppController({required this.itemRepository});
+  AppController({required this.userRepository});
 
   final storage = Get.find<FlutterSecureStorage>();
   RxBool hasSearchIcon = true.obs;
@@ -27,9 +32,9 @@ class AppController extends GetxController {
   RxString firstName = ''.obs;
   RxString lastName = ''.obs;
   RxString phone = ''.obs;
-  RxString role = ''.obs;
   RxBool hasShopId = false.obs;
   RxString userRole = ''.obs;
+  RxString userImageLink = ''.obs;
 
   @override
   void onInit() async {
@@ -47,8 +52,11 @@ class AppController extends GetxController {
 
   getShopId() async {
     hasShopId(await storage.read(key: 'shopId') != null);
-    userRole(await storage.read(key: 'role'));
-    // hasShopId(true);
+    getMe();
+    if (hasShopId.isTrue) {}
+    // userRole(await storage.read(key: 'role'));
+
+    // hasShopId(false);
     // userRole('SELLER');
     // userRole = 'SELLER';
     // hasShopId = true;
@@ -59,18 +67,60 @@ class AppController extends GetxController {
     selectedIndex(index);
   }
 
+  getMe() async {
+    try {
+      User user = await userRepository.getMe();
+      String? role = user.role;
+      String? img = user.image;
+      hasShopId(user.shopId != "" || user.shopId != null);
+      if (role != null) {
+        userRole(role);
+      }
+      if (img != null) {
+        userImageLink(img);
+      }
+    } catch (e) {
+      EasyLoading.showError('Some error happened',
+          dismissOnTap: true, maskType: EasyLoadingMaskType.black);
+    }
+  }
+
+  Future<String?> imageUpload(File file) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final mountainsRef = storageRef.child(userId.value + 'imgLink');
+
+    try {
+      await mountainsRef.putFile(file);
+      return await mountainsRef.getDownloadURL();
+    } on FirebaseException {
+      Fluttertoast.showToast(msg: "Uploading failed");
+      return null;
+    }
+  }
+
+  updateProfilePic(File file) async {
+    String? tempImgLink = await imageUpload(file);
+    bool? imgLink = await userRepository.updateProfile({
+      "input": {
+        "image": {"imageCover": tempImgLink}
+      }
+    });
+    if (imgLink != null) {
+      userImageLink(tempImgLink);
+    }
+  }
+
   getUserInfo() async {
     String? _id = await storage.read(key: 'userId');
     String? _firstName = await storage.read(key: 'firstName');
     String? _lastName = await storage.read(key: 'lastName');
     String? _phone = await storage.read(key: 'phone');
-    String? _role = await storage.read(key: 'role');
 
     userId(_id);
     firstName(_firstName);
     lastName(_lastName);
     phone(_phone);
-    role(_role);
+    userImageLink(await storage.read(key: 'userImg'));
   }
 
   logout() async {

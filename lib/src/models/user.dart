@@ -45,7 +45,7 @@ class User extends Equatable {
       lastName: json['lastName'],
       email: json['email'],
       role: json['role'],
-      image: json['image'],
+      image: json['image'] != null ? json['image']['imageCover'] : "",
       token: token,
       password: json['password'],
       phone: json['phone'],

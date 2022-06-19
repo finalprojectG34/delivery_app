@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:delivery_app/data/data_access/item_operation.dart';
+import 'package:delivery_app/data/repository/shop_repository.dart';
 import 'package:delivery_app/src/models/models.dart';
 import 'package:delivery_app/src/screens/home_page/AppCtx.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,16 +10,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../../../data/repository/item_repository.dart';
 import '../../models/shop.dart';
 
 class AddItemController extends GetxController {
-  final ItemRepository itemRepository;
-  final ItemOperation itemOperation;
+  final ShopRepository shopRepository;
   AppController appController = Get.find();
 
-  AddItemController(
-      {required this.itemOperation, required this.itemRepository});
+  AddItemController({required this.shopRepository});
 
   RxBool isCategoryFetchedFromDB = false.obs;
   RxList<Category>? categoryList = <Category>[].obs;
@@ -50,23 +47,14 @@ class AddItemController extends GetxController {
   void onInit() async {
     super.onInit();
     await getUserShop();
-    await getCategory();
-  }
-
-  getCategory() async {
-    List<Category> categories = await itemRepository.getCategory();
-    categoryList!(categories.obs);
-    print(categoryList);
-    isCategoryFetchedFromDB(true);
   }
 
   getUserShop() async {
     isShopLoading(true);
     errOccurred(false);
     try {
-      bool hasShop = await itemRepository.getUserShop('');
+      bool hasShop = await shopRepository.getUserShop('');
       userHasShop = hasShop.obs;
-      // itemList!(items);
     } on TimeoutException catch (e) {
       err(e.message);
       errOccurred(true);
@@ -78,22 +66,12 @@ class AddItemController extends GetxController {
     isShopLoading(false);
   }
 
-  addItem(variable, File file) async {
-    var imagePath = await imageUpload(file);
-    print('$imagePath -----------------------');
-    variable["imagePath"] = imagePath;
-    Item item = await itemRepository.addItem(variable);
-    itemId(item.id);
-  }
-
   addShop({name, description, subCity, city, required File file}) async {
     isShopLoading(true);
-    // logTrace('var', variable);
     var imagePath = await imageUpload(file);
     if (imagePath != null) {
-      // variable['input']["image"]['imageCover'] = imagePath;
       try {
-        Shop shop = await itemRepository.addShop(
+        Shop shop = await shopRepository.addShop(
           name: name,
           description: description,
           subCity: subCity,
@@ -105,7 +83,6 @@ class AddItemController extends GetxController {
           await storage.write(key: 'shopId', value: shop.id);
           appController.hasShopId(true);
           appController.changePage('Pending', 2);
-          // await storage.write(key: 'userRole', value: 'PENDING');
           EasyLoading.showSuccess('Shop created successfully',
               dismissOnTap: true, maskType: EasyLoadingMaskType.black);
         }
@@ -117,15 +94,9 @@ class AddItemController extends GetxController {
       shopImageErr(true);
     }
     isShopLoading(false);
-    // // print('$imagePath -----------------------');
-
-    // Item item = await itemRepository.addItem(variable);
-    // itemId(item.id);
   }
 
   Future<String?> imageUpload(File file) async {
-    // var storage = Get.find<FlutterSecureStorage>();
-    // var userId = await storage.read(key: "userId");
     final storageRef = FirebaseStorage.instance.ref();
     final mountainsRef = storageRef.child(appController.userId.value);
 
@@ -140,7 +111,6 @@ class AddItemController extends GetxController {
 
   addSelectedAttribute(String key, String value) {
     if (selectedAttributes.isEmpty) {
-      // selectedAttributes.({key: value});
       selectedAttributes.addEntries(
         [
           MapEntry(
@@ -165,9 +135,6 @@ class AddItemController extends GetxController {
   }
 
   changeAttribute(variable) {
-    // attributes.clear();
-    // attributes.
-    // attributes = variable.obs;
     attributes(variable);
   }
 }

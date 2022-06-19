@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:delivery_app/src/models/shop.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -143,6 +145,66 @@ class ShopRepository {
     }
     print(response);
     return Shop.fromJson(response.data!["getOneCompany"]);
+  }
+
+  Future<Shop> addShop({name, description, subCity, city, imageCover}) async {
+    String addItemMutation = r'''
+     mutation CreateCompany($input: CompanyInput!) {
+        createCompany(input: $input) {
+          id
+          slug
+          name
+          ownerId
+          status
+          sellingCategories
+        }
+      }
+      ''';
+
+    final response = await gqlClient.query(QueryOptions(
+      document: gql(addItemMutation),
+      variables: {
+        "input": {
+          "name": name,
+          "description": description,
+          "address": {"subCity": subCity, "city": city},
+          "image": {"imageCover": imageCover},
+          "role": "DELIVERY",
+        }
+      },
+      fetchPolicy: FetchPolicy.noCache,
+    ));
+    if (response.hasException) {
+      print(response.exception);
+      throw Exception("Error Happened");
+    }
+    print(response);
+    return Shop.fromJson(response.data!['createCompany']);
+  }
+
+  Future<bool> getUserShop(String userId) async {
+    final response = await gqlClient
+        .query(
+      QueryOptions(
+        document: gql(r'''
+          query GetCompanyByUserId($getCompanyByUserIdId: ID) {
+              getCompanyByUserId(id: $getCompanyByUserIdId) {
+                id
+              }
+          }
+  '''),
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    )
+        .timeout(Duration(seconds: 30), onTimeout: () {
+      throw TimeoutException('request timed out', const Duration(seconds: 30));
+    });
+    if (response.hasException) {
+      print(response.exception);
+      throw Exception("Error Happened");
+    }
+    print((response.data!['getCompanyByUserId'] as List));
+    return (response.data!['getCompanyByUserId'] as List).isNotEmpty;
   }
 }
 

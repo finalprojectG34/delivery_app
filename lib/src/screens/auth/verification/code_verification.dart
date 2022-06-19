@@ -11,10 +11,13 @@ class CodeVerification extends StatelessWidget {
   CodeVerification({Key? key, required this.redirectFrom}) : super(key: key);
   final txtController = TextEditingController();
 
+  // final formState = GlobalKey<FormState>();
   final String redirectFrom;
   LoginController? loginController;
   SignUpController? signUpController;
   ResetController? resetController;
+
+  // var variable;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class CodeVerification extends StatelessWidget {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
+          // resizeToAvoidBottomInset: false,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: ListView(
@@ -47,6 +51,7 @@ class CodeVerification extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
+
                 TextFormField(
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
@@ -96,6 +101,20 @@ class CodeVerification extends StatelessWidget {
                                 ?.signUp(txtController.text.toString())
                             : await resetController
                                 ?.verifyCode(txtController.text.toString());
+
+                    // ctx.signIn(txtController.text.toString());
+
+                    // Get.offAll(() => App());
+                    // Na
+                    // Navigator.of(context)
+                    //     .pushNamedAndRemoveUntil('/',ModalRoute.withName("/"));
+                    // if(signUpController!.isUserCreatedSuccessfully.isTrue){
+                    //   Fluttertoast.showToast(
+                    //       msg: 'Account successfully created');
+                    // }
+                    // AppController appCtx = Get.find();
+                    // appCtx.selectedIndex(0);
+                    // Get.offNamedUntil("/", ModalRoute.withName("/"));
                   },
                   child: const Text(
                     "Verify Code",
@@ -105,6 +124,48 @@ class CodeVerification extends StatelessWidget {
                         fontSize: 13),
                   ),
                 ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // // const Spacer(),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text(
+                //       "Have an account",
+                //       style: TextStyle(color: Colors.grey),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {},
+                //       child: const Text(
+                //         "Sign in",
+                //         style: TextStyle(
+                //             color: Color(0xff40BFFF),
+                //             fontWeight: FontWeight.bold,
+                //             fontSize: 13),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text(
+                //       "Don't have an account",
+                //       style: TextStyle(color: Colors.grey),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {},
+                //       child: const Text(
+                //         "Register",
+                //         style: TextStyle(
+                //             color: Color(0xff40BFFF),
+                //             fontWeight: FontWeight.bold,
+                //             fontSize: 13),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

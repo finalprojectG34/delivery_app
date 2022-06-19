@@ -1,4 +1,5 @@
 import 'package:delivery_app/data/repository/user_repository.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,8 @@ class ProfilePageController extends GetxController {
 
   ProfilePageController({required this.userRepository});
 
-  Rx<Address>? address = Address().obs;
+  Rx<Address>? address =
+      Address(subCity: "", country: "", addressName: "", city: "").obs;
 
   RxBool errOccurred = false.obs;
   RxString errorText = "".obs;
@@ -49,16 +51,23 @@ class ProfilePageController extends GetxController {
 
   updateUserAddress(Address _address) async {
     isProfileLoading(true);
+    if (isProfileLoading.isTrue) {
+      EasyLoading.instance.loadingStyle = EasyLoadingStyle.light;
+      await EasyLoading.show(
+        status: 'Updating address ...',
+        maskType: EasyLoadingMaskType.black,
+      );
+    }
     try {
       Address temp = await userRepository.updateUserAddress(_address);
       address!(temp);
 
       await setUserAddress(temp);
-      getUserAddress();
     } catch (e) {
       errOccurred(true);
       errorText("Please try again!");
     }
     isProfileLoading(false);
+    EasyLoading.dismiss();
   }
 }

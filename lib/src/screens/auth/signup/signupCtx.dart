@@ -21,6 +21,7 @@ class SignUpController extends GetxController {
   RxBool error = false.obs;
   String verificationId = "";
 
+  // String? signUpToken;
   user.User? createdUser;
   final storage = Get.find<FlutterSecureStorage>();
   var userVariable;
@@ -58,7 +59,7 @@ class SignUpController extends GetxController {
       // EasyLoading.dismiss();
       EasyLoading.showError(e.toString(),
           maskType: EasyLoadingMaskType.black,
-          duration: const Duration(seconds: 3));
+          duration: const Duration(seconds: 2));
     } finally {}
   }
 
@@ -81,7 +82,8 @@ class SignUpController extends GetxController {
         .then((UserCredential result) async {
       if (token != null) {
         userVariable['token']['idToken'] = token;
-        print("token found successfully");
+        // userVariable['token']['phone'] = ;
+        print("token found sucessfully");
         await signupUser(userVariable);
 
         if (createdUser != null) {
@@ -97,16 +99,17 @@ class SignUpController extends GetxController {
           AppController appController = Get.find();
           appController.changePage('Home', 0);
           appController.isAuthenticated(true);
-          Get.offNamed('/');
+          await appController.getMe();
+          Get.offAllNamed('/');
         }
       } else {
         EasyLoading.showError('Some error occurred',
             dismissOnTap: true, maskType: EasyLoadingMaskType.black);
-        Get.back();
+        // Get.back();
       }
     }).catchError((e) {
       EasyLoading.showError(e, maskType: EasyLoadingMaskType.black);
-      Get.back();
+      // Get.back();
     });
   }
 
@@ -115,18 +118,18 @@ class SignUpController extends GetxController {
     isLoading(true);
     try {
       createdUser = await userRepository.signupUser(userVariable);
-      print("SignUp successfully");
+      print("SignUp succesfully");
     } on TimeoutException catch (e) {
       EasyLoading.showError(e.message!,
           dismissOnTap: true,
           maskType: EasyLoadingMaskType.black,
-          duration: const Duration(seconds: 3));
+          duration: const Duration(seconds: 2));
     } catch (e) {
       print("error  $e  ------------------------------------");
       EasyLoading.showError('Some error occurred. Please try again',
           dismissOnTap: true,
           maskType: EasyLoadingMaskType.black,
-          duration: const Duration(seconds: 3));
+          duration: const Duration(seconds: 2));
       Get.back();
     }
   }

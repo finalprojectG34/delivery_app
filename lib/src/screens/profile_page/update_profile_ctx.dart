@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:delivery_app/data/repository/item_repository.dart';
+import 'package:delivery_app/data/repository/user_repository.dart';
 import 'package:delivery_app/src/screens/home_page/AppCtx.dart';
 import 'package:delivery_app/src/utils/loger/console_loger.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,9 +8,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class UpdateProfileController extends GetxController {
-  final ItemRepository itemRepository;
+  final UserRepository userRepository;
 
-  UpdateProfileController({required this.itemRepository});
+  UpdateProfileController({required this.userRepository});
 
   final storage = Get.find<FlutterSecureStorage>();
   AppController appController = Get.find();
@@ -24,7 +24,7 @@ class UpdateProfileController extends GetxController {
     print('var $variable');
     logTrace('phone', variable['input']['phone']);
     try {
-      isProfileUpdated = await itemRepository.updateProfile(variable);
+      isProfileUpdated = await userRepository.updateProfile(variable);
       if (isProfileUpdated == true) {
         if (variable['input']['firstName'] != null) {
           await storage.write(

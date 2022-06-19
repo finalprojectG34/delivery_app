@@ -105,7 +105,7 @@ class _AddShopState extends State<AddShop> {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.shop_outlined),
                   contentPadding: const EdgeInsets.all(10),
-                  hintText: "Shop Name",
+                  hintText: "Delivery agent name",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
                       borderSide:
@@ -124,20 +124,15 @@ class _AddShopState extends State<AddShop> {
                 onChanged: (text) => shopName = text,
                 validator: validateName,
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               TextFormField(
                 decoration: InputDecoration(
                   prefixIcon: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.edit),
-                    ],
+                    children: [const Icon(Icons.edit)],
                   ),
                   contentPadding: const EdgeInsets.all(10),
-                  hintText: "Shop Description",
+                  hintText: "Agent Description",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
                       borderSide:
@@ -160,9 +155,7 @@ class _AddShopState extends State<AddShop> {
                   return null;
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               DropdownButtonFormField2(
                 validator: (val) {
                   if (selectedArea == null) return 'Please select area';
@@ -199,11 +192,8 @@ class _AddShopState extends State<AddShop> {
                 ),
                 items: locationArea.map(
                   (item) {
-                    // print(item);
                     return DropdownMenuItem<String>(
                       value: item,
-
-                      // key: UniqueKey(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -226,28 +216,17 @@ class _AddShopState extends State<AddShop> {
                     selectedArea = value.toString();
                     selectedSubCity = null;
                   });
-                  // print('onsaved  $value');
-                  // ctx.addSelectedAttribute(
-                  //     ctx.attributes[index]['name'],
-                  //     value.toString());
-                  // addCategoryController.setCategoryType(
-                  //     categoryId: widget.addCategoryModel.id,
-                  //     categoryType: value);
                 },
                 onSaved: (value) {
                   // selectedValue = value.toString();
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               Text(
                 'Choose Sub city area',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               DropdownButtonFormField2(
                 value: selectedSubCity,
                 validator: (val) {
@@ -286,10 +265,8 @@ class _AddShopState extends State<AddShop> {
                     ? null
                     : getSubCityFromArea(selectedArea!).map(
                         (item) {
-                          // print(item);
                           return DropdownMenuItem<String>(
                             value: item,
-                            // key: Key(item),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -309,13 +286,6 @@ class _AddShopState extends State<AddShop> {
                       ).toList(),
                 onChanged: (value) {
                   selectedSubCity = value.toString();
-                  // print('onsaved  $value');
-                  // ctx.addSelectedAttribute(
-                  //     ctx.attributes[index]['name'],
-                  //     value.toString());
-                  // addCategoryController.setCategoryType(
-                  //     categoryId: widget.addCategoryModel.id,
-                  //     categoryType: value);
                 },
                 onSaved: (value) {
                   // selectedValue = value.toString();
@@ -354,10 +324,7 @@ class _AddShopState extends State<AddShop> {
                       ),
                     )
                   : Container(),
-              if (_image != null)
-                SizedBox(
-                  height: 10,
-                ),
+              if (_image != null) SizedBox(height: 10),
               Row(
                 children: [
                   OutlinedButton(
@@ -399,9 +366,7 @@ class _AddShopState extends State<AddShop> {
                                           Text(
                                             'Add from camera',
                                           ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
+                                          SizedBox(height: 10),
                                           Icon(
                                             Icons.add_a_photo,
                                             size: 30,
@@ -427,9 +392,7 @@ class _AddShopState extends State<AddShop> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text('Add from gallery'),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
+                                        SizedBox(height: 10),
                                         Icon(
                                           Icons.camera,
                                           size: 30,
@@ -448,9 +411,7 @@ class _AddShopState extends State<AddShop> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               ElevatedButton(
                 style: ButtonStyle(
                   shadowColor:
@@ -477,35 +438,7 @@ class _AddShopState extends State<AddShop> {
                       subCity: selectedSubCity,
                       file: _image!,
                     );
-                    // FocusScope.of(context).unfocus();
-                    // EasyLoading.instance.loadingStyle =
-                    //     EasyLoadingStyle.light;
-                    // await EasyLoading.show(
-                    //   status: 'waiting for verification ...',
-                    //   maskType: EasyLoadingMaskType.black,
-                    // );
-                    // ctx.sendOtp({
-                    //   "token": {
-                    //     "firstName": firstName,
-                    //     "lastName": lastName,
-                    //     "phone": "+251" + phoneNumber!,
-                    //     "password": password,
-                    //     "confirmPassword": password,
-                    //     "idToken": ''
-                    //   }
-                    // });
                   }
-
-                  // signUpController.signupUser({
-                  //   "input": {
-                  //     "firstName": firstName,
-                  //     "lastName": lastName,
-                  //     "phone": phoneNumber,
-                  //     // "password": "my password"
-                  //   }
-                  // });
-
-                  // ctx.sendFakeOtp();
                 },
                 child: const Text(
                   "Register",

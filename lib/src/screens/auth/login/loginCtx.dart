@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:delivery_app/src/screens/order_page/received_orders_page.dart';
 import 'package:delivery_app/src/screens/profile_page/profile_page_ctx.dart';
 import 'package:delivery_app/src/utils/loger/console_loger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +10,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../../data/repository/user_repository.dart';
-import '../../../app.dart';
 import '../../../models/user.dart' as user;
 import '../../home_page/AppCtx.dart';
 import '../verification/code_verification.dart';
@@ -38,7 +38,7 @@ class LoginController extends GetxController {
         EasyLoading.showError('Incorrect username or password',
             dismissOnTap: true,
             maskType: EasyLoadingMaskType.black,
-            duration: const Duration(seconds: 3));
+            duration: const Duration(seconds: 2));
         // Get.back();
       } else {
         await storage.write(key: 'token', value: signedInUser?.token);
@@ -48,28 +48,33 @@ class LoginController extends GetxController {
         await storage.write(key: 'phone', value: signedInUser?.phone);
         await storage.write(key: 'role', value: signedInUser?.role);
         await storage.write(key: 'shopId', value: signedInUser?.shopId);
+        await storage.write(key: 'userImg', value: signedInUser?.image);
 
         if (signedInUser?.address?.addressName != null) {
           await profilePageController.setUserAddress(signedInUser?.address);
         }
+        // await storage.write(key: 'user', value: jsonEncode(signedInUser));
         EasyLoading.showSuccess('Logged in successfully',
-            dismissOnTap: true, maskType: EasyLoadingMaskType.black);
+            dismissOnTap: true,
+            maskType: EasyLoadingMaskType.black,
+            duration: Duration(seconds: 2));
         AppController appController = Get.find();
         appController.changePage('Home', 0);
         appController.isAuthenticated(true);
-        Get.offAll(() => App());
+        await appController.getMe();
+        Get.offAllNamed('/');
       }
     } on TimeoutException catch (e) {
       EasyLoading.showError(e.message!,
           dismissOnTap: true,
           maskType: EasyLoadingMaskType.black,
-          duration: const Duration(seconds: 3));
+          duration: const Duration(seconds: 2));
     } catch (e) {
       logTrace("error", e.toString());
       EasyLoading.showError(e.toString(),
           dismissOnTap: true,
           maskType: EasyLoadingMaskType.black,
-          duration: const Duration(seconds: 3));
+          duration: const Duration(seconds: 2));
       // Get.back();
     }
   }
@@ -120,7 +125,7 @@ class LoginController extends GetxController {
         .signInWithCredential(credential)
         .then((UserCredential result) {
       // result.additionalUserInfo.
-      Get.offAll(() => App());
+      Get.offAll(() => ReceivedOrdersPage());
     }).catchError((e) {
       Fluttertoast.showToast(msg: e);
     });

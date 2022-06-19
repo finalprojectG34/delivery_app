@@ -1,9 +1,8 @@
-import 'package:delivery_app/data/data_access/item_operation.dart';
-import 'package:delivery_app/data/repository/item_repository.dart';
 import 'package:delivery_app/data/repository/shop_repository.dart';
 import 'package:delivery_app/data/repository/user_repository.dart';
 import 'package:delivery_app/src/packages/shared_preferences.dart';
 import 'package:delivery_app/src/screens/auth/reset_password/resetCtx.dart';
+import 'package:delivery_app/src/screens/profile_page/addressCtx.dart';
 import 'package:delivery_app/src/screens/shops_list/shops_list_ctx.dart';
 import 'package:get/get.dart';
 
@@ -14,8 +13,8 @@ import '../screens/auth/login/loginCtx.dart';
 import '../screens/auth/signup/signupCtx.dart';
 import '../screens/cart_page/cart_page_ctx.dart';
 import '../screens/home_page/AppCtx.dart';
-import '../screens/items/item_list_ctx.dart';
 import '../screens/order_page/order_page_ctx.dart';
+import '../screens/profile_page/changePassCtx.dart';
 import '../screens/profile_page/profile_page_ctx.dart';
 import '../screens/profile_page/update_profile_ctx.dart';
 import 'graphql_client.dart';
@@ -25,10 +24,6 @@ class ApplicationBindings implements Bindings {
 
   final UserRepository _userRepository =
       UserRepository(gqlClient: Client().connect);
-
-  final ItemRepository _itemRepository = ItemRepository(
-    itemOperation: ItemOperation(gqlClient: Client().connect),
-  );
 
   final CartRepository _cartRepository = CartRepository(
     gqlClient: Client().connect,
@@ -50,15 +45,13 @@ class ApplicationBindings implements Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => AppController(itemRepository: _itemRepository),
+      () => AppController(userRepository: _userRepository),
       fenix: true,
     );
     Get.lazyPut(
-        () => AddItemController(
-              itemRepository: _itemRepository,
-              itemOperation: ItemOperation(gqlClient: Client().connect),
-            ),
-        fenix: true);
+      () => AddItemController(shopRepository: _shopRepository),
+      fenix: true,
+    );
     Get.lazyPut(
       () => CartPageController(cartRepository: _cartRepository),
       fenix: true,
@@ -84,11 +77,15 @@ class ApplicationBindings implements Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => ItemListController(itemRepository: _itemRepository),
+      () => UpdateProfileController(userRepository: _userRepository),
       fenix: true,
     );
     Get.lazyPut(
-      () => UpdateProfileController(itemRepository: _itemRepository),
+      () => ChangePasswordController(userRepository: _userRepository),
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => AddressController(userRepository: _userRepository),
       fenix: true,
     );
   }
