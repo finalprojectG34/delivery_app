@@ -26,6 +26,7 @@ class OrderPageController extends GetxController {
       List<Order> orders = await orderRepository.getOrder(status);
       orderList!(orders);
       print(orders);
+      isOrderError(false);
     } catch (e) {
       print(e);
       isOrderError(true);

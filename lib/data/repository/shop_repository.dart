@@ -156,7 +156,6 @@ class ShopRepository {
           name
           ownerId
           status
-          sellingCategories
         }
       }
       ''';

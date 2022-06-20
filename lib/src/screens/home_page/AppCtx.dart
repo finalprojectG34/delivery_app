@@ -72,7 +72,7 @@ class AppController extends GetxController {
       User user = await userRepository.getMe();
       String? role = user.role;
       String? img = user.image;
-      hasShopId(user.shopId != "" || user.shopId != null);
+      hasShopId(user.shopId != null);
       if (role != null) {
         userRole(role);
       }

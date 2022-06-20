@@ -10,7 +10,7 @@ class OrderRepository {
   Future<List<Order>> getOrder(String status) async {
     String getOrderByDelivery = r'''
        query GetOrderByDelivery($deliveryStatus: OrderDeliveryStatus){
-          getOrderByDelivery(deliveryStatus: $deliveryStatus) {
+          getDeliveryOrderByUserId(deliveryStatus: $deliveryStatus) {
             id
             deliveryStatus
             userId

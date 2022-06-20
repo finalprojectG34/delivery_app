@@ -157,8 +157,6 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return GetX<AppController>(
       builder: (ctx) {
-        print("ctx.userRole.value ");
-        logTrace("user role", ctx.hasShopId.value);
         return ctx.isAuthenticated.isFalse
             ? Login()
             : ctx.userRole.value == "USER"
