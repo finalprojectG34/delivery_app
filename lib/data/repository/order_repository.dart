@@ -55,7 +55,7 @@ class OrderRepository {
       throw Exception("Error Happened");
     } else {
       print(response);
-      for (var element in (response.data!["getOrderByDelivery"] as List)) {
+      for (var element in (response.data!["getDeliveryOrderByUserId"] as List)) {
         print(element);
         newOrders.add(Order.fromJson(element));
       }
