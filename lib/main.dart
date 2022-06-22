@@ -33,7 +33,7 @@ class _AppViewState extends State<AppView> {
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
       cache: GraphQLCache(),
-      link: HttpLink("http://192.168.0.196:8000/graphql"),
+      link: HttpLink("http://192.168.0.172:8000/graphql"),
     ),
   );
 

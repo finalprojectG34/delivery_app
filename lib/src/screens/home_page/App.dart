@@ -1,7 +1,6 @@
 import 'package:delivery_app/src/app.dart';
 import 'package:delivery_app/src/screens/order_page/received_orders_page.dart';
 import 'package:delivery_app/src/screens/screens.dart';
-import 'package:delivery_app/src/utils/loger/console_loger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -60,13 +59,18 @@ class _AppState extends State<App> {
         } else {
           appController.changePage('Register as delivery', index);
         }
-        return appController.isAuthenticated.isTrue
-            ? appController.hasShopId.isTrue &&
-                    appController.userRole.value == 'DELIVERY'
-                ? AddShop(redirectFrom: 'home')
-                : (appController.hasShopId.isTrue &&
-                        appController.userRole.value == 'SELLER')
-                    ? const Padding(
+        if (appController.isAuthenticated.isTrue) {
+          return appController.hasShopId.isTrue &&
+                  appController.userRole.value == 'DELIVERY'
+              ? AddShop(redirectFrom: 'home')
+              : (appController.hasShopId.isTrue &&
+                      appController.userRole.value == 'SELLER')
+                  ? GestureDetector(
+                      onTap: () async {
+                        await appController.getUserInfo();
+                        await appController.getShopId();
+                      },
+                      child: const Padding(
                         padding: EdgeInsets.all(20),
                         child: Center(
                           child: Text(
@@ -75,10 +79,16 @@ class _AppState extends State<App> {
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
-                      )
-                    : appController.hasShopId.isTrue &&
-                            appController.userRole.value == 'USER'
-                        ? const Padding(
+                      ),
+                    )
+                  : appController.hasShopId.isTrue &&
+                          appController.userRole.value == 'USER'
+                      ? GestureDetector(
+                          onTap: () async {
+                            await appController.getUserInfo();
+                            await appController.getShopId();
+                          },
+                          child: const Padding(
                             padding: EdgeInsets.all(20),
                             child: Center(
                               child: Text(
@@ -87,9 +97,12 @@ class _AppState extends State<App> {
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
-                          )
-                        : AddShop(redirectFrom: 'home')
-            : Container();
+                          ),
+                        )
+                      : AddShop(redirectFrom: 'home');
+        } else {
+          return Container();
+        }
       case 2:
         appController.getUserInfo();
         appController.changePage('Profile', index);
@@ -98,24 +111,30 @@ class _AppState extends State<App> {
             : appController.userRole.value == "USER"
                 ? AddShop(redirectFrom: "home")
                 : appController.userRole.value == "SELLER"
-                    ? Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  appController.logout();
-                                },
-                                child: const Text("Logout"),
-                              )
-                            ],
+                    ? GestureDetector(
+                        onTap: () async {
+                          await appController.getUserInfo();
+                          await appController.getShopId();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    appController.logout();
+                                  },
+                                  child: const Text("Logout"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -128,24 +147,30 @@ class _AppState extends State<App> {
             : appController.userRole.value == "USER"
                 ? AddShop(redirectFrom: "home")
                 : appController.userRole.value == "SELLER"
-                    ? Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  appController.logout();
-                                },
-                                child: const Text("Logout"),
-                              )
-                            ],
+                    ? GestureDetector(
+                        onTap: () async {
+                          await appController.getUserInfo();
+                          await appController.getShopId();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    appController.logout();
+                                  },
+                                  child: const Text("Logout"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -161,47 +186,59 @@ class _AppState extends State<App> {
             ? Login()
             : ctx.userRole.value == "USER"
                 ? ctx.hasShopId.value
-                    ? Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Your request to be a delivery agent is under review. You will be a delivery agent as soon as the review is complete.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  ctx.logout();
-                                },
-                                child: const Text("Logout"),
-                              )
-                            ],
+                    ? GestureDetector(
+                        onTap: () async {
+                          await ctx.getUserInfo();
+                          await ctx.getShopId();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Your request to be a delivery agent is under review. You will be a delivery agent as soon as the review is complete.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    ctx.logout();
+                                  },
+                                  child: const Text("Logout"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
                     : AddShop(redirectFrom: "home")
                 : ctx.userRole.value == "SELLER"
-                    ? Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  ctx.logout();
-                                },
-                                child: const Text("Logout"),
-                              )
-                            ],
+                    ? GestureDetector(
+                        onTap: () async {
+                          await ctx.getUserInfo();
+                          await ctx.getShopId();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'You are already registered as a seller please create a new account with a new phone number to continue using this app.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    ctx.logout();
+                                  },
+                                  child: const Text("Logout"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )

@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final HttpLink _httpLink = HttpLink('http://192.168.0.196:8000/graphql');
+final HttpLink _httpLink = HttpLink('http://192.168.0.172:8000/graphql');
 
 Link concat() {
   const storage = FlutterSecureStorage();
